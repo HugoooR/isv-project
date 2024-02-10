@@ -12,20 +12,46 @@ from .src.fusionner_horizontalement import fusionner_horizontalement
 from .src.create_gif import creer_gif
 
 # Create your views here.
-def upload_image(request):
-   if request.method == 'POST' and request.FILES:
-      image = request.FILES['image']
-
-      # ouvrir image
-      image_t = open_image(image)
-      image_t.save("media/image_classique.png")
-      return render(request, 'init_image/traitement.html')
-   
+def upload_image(request):   
    return render(request, 'init_image/index.html')
 
-def page_gray(request):
+def black_white(request):
+   tableau_extension = ['jpeg', 'jpg', 'svg', 'png']
+
    if request.method == 'POST' and request.FILES:
       image = request.FILES['image']
+
+      nom_image = str(image)
+      nom_fichier, extension = nom_image.split(".")
+
+      if extension not in tableau_extension:
+         return render(request, 'init_image/black_white.html', context={"image_classique" : False,
+            'message_erreur' : 'mauvaise extension (jpeg/jpg, png ou svg)'})
+
+      # ouvrir image 
+      image_t = open_image(image)
+      image_t.save("media/image_classique.png")
+      
+      # 1. Transformation en noir et blanc
+      image_noir_blanc = convert_to_black_and_white(image_t)
+      image_noir_blanc.save("media/image_noir-blanc.png")
+
+      return render(request, 'init_image/black_white.html', context={"image_classique" : True})
+
+   return render(request, 'init_image/black_white.html', context={"image_classique" : False})
+
+def page_gray(request):
+   tableau_extension = ['jpeg', 'jpg', 'svg', 'png']
+
+   if request.method == 'POST' and request.FILES:
+      image = request.FILES['image']
+
+      nom_image = str(image)
+      nom_fichier, extension = nom_image.split(".")
+
+      if extension not in tableau_extension:
+         return render(request, 'init_image/gray.html', context={"image_classique" : False,
+            'message_erreur' : 'mauvaise extension (jpeg/jpg, png ou svg)'})
 
       # ouvrir image
       image_t = open_image(image)
@@ -39,27 +65,25 @@ def page_gray(request):
          
    return render(request, 'init_image/gray.html', context={"image_classique" : False})
 
-def black_white(request):
-   if request.method == 'POST' and request.FILES:
-      image = request.FILES['image']
-
-      # ouvrir image
-      image_t = open_image(image)
-      image_t.save("media/image_classique.png")
-      
-      # 1. Transformation en noir et blanc
-      image_noir_blanc = convert_to_black_and_white(image_t)
-      image_noir_blanc.save("media/image_noir-blanc.png")
-
-      return render(request, 'init_image/black_white.html', context={"image_classique" : True})
-
-   return render(request, 'init_image/black_white.html', context={"image_classique" : False})
-
 def resize_picture(request):
+   tableau_extension = ['jpeg', 'jpg', 'svg', 'png']
+
    if request.method == 'POST' and request.FILES:
       image = request.FILES['image']
-      hauteur = int(request.POST['hauteur'])
-      largeur = int(request.POST['largeur'])
+
+      nom_image = str(image)
+      nom_fichier, extension = nom_image.split(".")
+
+      if extension not in tableau_extension:
+         return render(request, 'init_image/resize.html', context={"image_classique" : False,
+            'message_erreur' : 'Erreur : mauvaise extension (jpeg/jpg, png ou svg)'})
+
+      try :
+         hauteur = int(request.POST['hauteur'])
+         largeur = int(request.POST['largeur'])
+      except:
+         return render(request, 'init_image/resize.html', context={"image_classique" : False,
+            'message_erreur' : 'Erreur : seulement des intiers pour la hauteur et la largeur'})
 
       if(hauteur < 1 ):
          hauteur = 100
@@ -79,9 +103,20 @@ def resize_picture(request):
    return render(request, 'init_image/resize.html', context={"image_classique" : False})
 
 def alignement_vertical(request):
+   tableau_extension = ['jpeg', 'jpg', 'svg', 'png']
+
    if request.method == 'POST' and request.FILES:
       image = request.FILES['image']
       image2 = request.FILES['image2']
+
+      nom_image = str(image)
+      nom_image2 = str(image2)
+      nom_fichier, extension = nom_image.split(".")
+      nom_fichier, extension2 = nom_image2.split(".")
+
+      if extension not in tableau_extension or extension2 not in tableau_extension:
+         return render(request, 'init_image/align_vertical.html', context={"image_classique" : False,
+            'message_erreur' : 'Erreur : mauvaise extension (jpeg/jpg, png ou svg)'})
 
       # ouvrir image
       image_t1 = open_image(image)
@@ -99,9 +134,20 @@ def alignement_vertical(request):
    return render(request, 'init_image/align_vertical.html', context={"image_classique" : False})
 
 def alignement_horizontal(request):
+   tableau_extension = ['jpeg', 'jpg', 'svg', 'png']
+
    if request.method == 'POST' and request.FILES:
       image = request.FILES['image']
       image2 = request.FILES['image2']
+
+      nom_image = str(image)
+      nom_image2 = str(image2)
+      nom_fichier, extension = nom_image.split(".")
+      nom_fichier, extension2 = nom_image2.split(".")
+
+      if extension not in tableau_extension or extension2 not in tableau_extension:
+         return render(request, 'init_image/align_horizontal.html', context={"image_classique" : False,
+            'message_erreur' : 'Erreur : mauvaise extension (jpeg/jpg, png ou svg)'})
 
       # ouvrir image
       image_t1 = open_image(image)
@@ -119,9 +165,31 @@ def alignement_horizontal(request):
    return render(request, 'init_image/align_horizontal.html', context={"image_classique" : False})
 
 def fusion(request):
+   tableau_extension = ['jpeg', 'jpg', 'svg', 'png']
+
    if request.method == 'POST' and request.FILES:
       image = request.FILES['image']
       image2 = request.FILES['image2']
+
+      nom_image = str(image)
+      nom_image2 = str(image2)
+      nom_fichier, extension = nom_image.split(".")
+      nom_fichier, extension2 = nom_image2.split(".")
+
+      if extension not in tableau_extension or extension2 not in tableau_extension:
+         return render(request, 'init_image/fusion.html', context={"image_classique" : False,
+            'message_erreur' : 'Erreur : mauvaise extension (jpeg/jpg, png ou svg)'})
+
+      opacite = request.POST['opacite']
+      opacite = opacite.replace(',', '.')
+      opacite = float(opacite)
+
+      try :
+         position_x = int(request.POST['position_x'])
+         position_y = int(request.POST['position_y'])
+      except:
+         return render(request, 'init_image/fusion.html', context={"image_classique" : False,
+            'message_erreur' : 'Erreur : seulement des intiers pour l\'opacité et la position (x,y)'})
 
       # ouvrir image
       image_t1 = open_image(image)
@@ -131,7 +199,7 @@ def fusion(request):
       image_t2.save("media/image_classique_2.png")
       
       # 1. Transformation en noir et blanc
-      image_noir_blanc = blend_images(image_t1, image_t2, 0.1, (1000,1000))
+      image_noir_blanc = blend_images(image_t1, image_t2, opacite, (position_x,position_y))
       image_noir_blanc.save("media/image_fusion.png")
 
       return render(request, 'init_image/fusion.html', context={"image_classique" : True})
@@ -139,22 +207,41 @@ def fusion(request):
    return render(request, 'init_image/fusion.html', context={"image_classique" : False})
 
 def animation(request):
+   tableau_extension = ['jpeg', 'jpg', 'svg', 'png']
+
    if request.method == 'POST' and request.FILES:
-      image = request.FILES['image']
-      image2 = request.FILES['image2']
+
+      tableau_images = []
+      i = 0
+
       duree = int(request.POST['duree'])
+      images = request.FILES.getlist('images[]')
 
-      # ouvrir image
-      image_t1 = open_image(image)
-      image_t1.save("media/image_classique_1.png")
+      for image in images :
+        tableau_images.append(image)
 
-      image_t2 = open_image(image2)
-      image_t2.save("media/image_classique_2.png")
+      for image in tableau_images:
+         nom_image = str(image)
+         nom_fichier, extension = nom_image.split(".")
+         if extension not in tableau_extension:
+            return render(request, 'init_image/animation.html', context={"image_classique" : False,
+               'message_erreur' : 'Erreur : mauvaise extension (jpeg/jpg, png ou svg)'})
+
+      
+      # save all picture
+      for image in tableau_images:
+         image_t1 = open_image(image)
+         image_t1.save("media/image_classique_" + str(i) + ".png")
+         tableau_images[i] = image_t1
+         i += 1
+
+      tab_number = [number for number in range(0, i)]
       
       # 1. Transformation en noir et blanc
-      image_noir_blanc = creer_gif([image_t1, image_t2], duree)
+      image_noir_blanc = creer_gif(tableau_images, duree)
 
-      return render(request, 'init_image/animation.html', context={"image_classique" : True})
+      return render(request, 'init_image/animation.html', context={"image_classique" : True, 
+            'tab_number' : tab_number})
 
    return render(request, 'init_image/animation.html', context={"image_classique" : False})
 

@@ -6,14 +6,14 @@ def blend_images(img1, img2, blend_ratio, position):
     new_img1 = img1
     new_img2 = img2
 
-    if (np.asarray(img1).shape[-1] != np.asarray(img2).shape[-1]):
+    if (np.asarray(img1).shape[-1] or np.asarray(img2).shape[-1] == 4):
         # On regarde si l'image 1 a le canal alpha, si oui on l'enlève
         if (np.asarray(img1).shape[-1] == 4):
             new_img1 = new_img1.convert("RGB")
         else:
             new_img2 = new_img2.convert("RGB")
-
-    the_new_img2 = img2
+        
+    the_new_img2 = new_img2
 
     # Ajuster la position de l'image 2 en fonction de la position relative
     x, y = position

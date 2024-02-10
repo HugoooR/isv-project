@@ -31,6 +31,12 @@
             Your are in page fusion
         </h1>
 
+        {% if message_erreur %}
+            <div class="text-white bg-danger text-center fs-4 p-3 mb-4">
+                {{ message_erreur }}
+            </div>
+        {% endif %}
+
         <div class="d-flex justify-content-center mb-5">
             <form class="border boder-1 border-black p-3 w-50" action="" method="post" enctype="multipart/form-data">
                 {% csrf_token %}
@@ -38,9 +44,21 @@
                     <label class="mb-2" for="image">Choississez une image</label>
                     <input type="file" id="image" name="image" accept="image/*">
                 </div>
-                <div class="form-group">
+                <div class="form-group mb-3">
                     <label class="mb-2" for="image2">Choississez une image</label>
                     <input type="file" id="image2" name="image2" accept="image/*">
+                </div>
+                <div class="form-group">
+                    <label class="mb-2" for="opacite">Choississez une opacité</label>
+                    <input type="text" id="opacite" name="opacite" accept="image/*">
+                </div>
+                <div class="form-group">
+                    <label class="mb-2" for="position_x">Choississez une position x</label>
+                    <input type="text" id="position_x" name="position_x" accept="image/*">
+                </div>
+                <div class="form-group">
+                    <label class="mb-2" for="position_y">Choississez une position y</label>
+                    <input type="text" id="position_y" name="position_y" accept="image/*">
                 </div>
                 <input type="submit" class="btn btn-primary mt-3" value="Telecharger">
             </form>

@@ -31,6 +31,12 @@
             Your are in page black and white
         </h1>
 
+        {% if message_erreur %}
+            <div class="text-white bg-danger text-center fs-4 p-3 mb-4">
+                {{ message_erreur }}
+            </div>
+        {% endif %}
+
         <div class="d-flex justify-content-center mb-5">
             <form class="border boder-1 border-black p-3 w-50" action="" method="post" enctype="multipart/form-data">
                 {% csrf_token %}
