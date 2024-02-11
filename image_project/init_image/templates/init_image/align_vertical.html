@@ -40,21 +40,20 @@
         <div class="d-flex justify-content-center mb-5">
             <form class="border boder-1 border-black p-3 w-50" action="" method="post" enctype="multipart/form-data">
                 {% csrf_token %}
-                <div class="form-group">
-                    <label class="mb-2" for="image">Choississez une image</label>
-                    <input type="file" id="image" name="image" accept="image/*">
-                </div>
-                <div class="form-group">
-                    <label class="mb-2" for="image2">Choississez une image</label>
-                    <input type="file" id="image2" name="image2" accept="image/*">
+                <div class="form-group mb-3">
+                    <label class="mb-2" for="images">Choississez des images</label>
+                    <input type="file" id="images" name="images[]" accept="image/*" multiple><br>
                 </div>
                 <input type="submit" class="btn btn-primary mt-3" value="Telecharger">
             </form>
         </div>
         {% if image_classique %}
             <div class="w-full">
-                    <img class="w-100 mb-5" src="../../media/image_classique_1.png">
-                    <img class="w-100 mb-5" src="../../media/image_classique_2.png">
+                {% for i in tab_number %}
+                    <div class="container__image">
+                        <img class="w-100 h-100" src="../../media/image_align_v_{{i}}.png">
+                    </div>
+                {% endfor %}
                     <img class="w-100" src="../../media/image_fusion-vertical.png">
             </div>
         {% endif %}

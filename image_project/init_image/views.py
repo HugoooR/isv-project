@@ -106,6 +106,7 @@ def alignement_vertical(request):
    tableau_extension = ['jpeg', 'jpg', 'svg', 'png']
 
    if request.method == 'POST' and request.FILES:
+      '''
       image = request.FILES['image']
       image2 = request.FILES['image2']
 
@@ -130,6 +131,47 @@ def alignement_vertical(request):
       image_noir_blanc.save("media/image_fusion-vertical.png")
 
       return render(request, 'init_image/align_vertical.html', context={"image_classique" : True})
+      '''
+      
+      tableau_images = []
+      i = 0
+
+      images = request.FILES.getlist('images[]')
+
+      for image in images :
+        tableau_images.append(image)
+
+      for image in tableau_images:
+         nom_image = str(image)
+         nom_fichier, extension = nom_image.split(".")
+         if extension not in tableau_extension:
+            return render(request, 'init_image/align_vertical.html', context={"image_classique" : False,
+            'message_erreur' : 'Erreur : mauvaise extension (jpeg/jpg, png ou svg)'})
+      
+      if len(tableau_images) <2:
+          return render(request, 'init_image/align_vertical.html', context={"image_classique" : False,
+               'message_erreur' : 'Erreur : Nombre d\'image insuffisant (2 images minimum)'})
+
+      
+
+      # save all picture
+      for image in tableau_images:
+         image_t1 = open_image(image)
+         image_t1.save("media/image_align_v_" + str(i) + ".png")
+         tableau_images[i] = image_t1
+         i += 1
+
+      tab_number = [number for number in range(0, i)]
+
+
+      img_align = fusionner_verticalement(tableau_images[0], tableau_images[1])
+      for i in range(2, len(tableau_images)):
+         img_align = fusionner_verticalement(img_align, tableau_images[i])
+      
+      img_align.save("media/image_fusion-vertical.png")
+
+
+      return render(request, 'init_image/align_vertical.html', context={"image_classique" : True, 'tab_number' : tab_number})
 
    return render(request, 'init_image/align_vertical.html', context={"image_classique" : False})
 
@@ -137,6 +179,7 @@ def alignement_horizontal(request):
    tableau_extension = ['jpeg', 'jpg', 'svg', 'png']
 
    if request.method == 'POST' and request.FILES:
+      '''
       image = request.FILES['image']
       image2 = request.FILES['image2']
 
@@ -159,8 +202,46 @@ def alignement_horizontal(request):
       # 1. Transformation en noir et blanc
       image_noir_blanc = fusionner_horizontalement(image_t1, image_t2)
       image_noir_blanc.save("media/image_fusion-horizontal.png")
+      '''
 
-      return render(request, 'init_image/align_horizontal.html', context={"image_classique" : True})
+      tableau_images = []
+      i = 0
+
+      images = request.FILES.getlist('images[]')
+
+      for image in images :
+        tableau_images.append(image)
+
+      for image in tableau_images:
+         nom_image = str(image)
+         nom_fichier, extension = nom_image.split(".")
+         if extension not in tableau_extension:
+            return render(request, 'init_image/align_horizontal.html', context={"image_classique" : False,
+            'message_erreur' : 'Erreur : mauvaise extension (jpeg/jpg, png ou svg)'})
+      
+      if len(tableau_images) <2:
+          return render(request, 'init_image/align_horizontal.html', context={"image_classique" : False,
+               'message_erreur' : 'Erreur : Nombre d\'image insuffisant (2 images minimum)'})
+
+      
+
+      # save all picture
+      for image in tableau_images:
+         image_t1 = open_image(image)
+         image_t1.save("media/image_align_h_" + str(i) + ".png")
+         tableau_images[i] = image_t1
+         i += 1
+
+      tab_number = [number for number in range(0, i)]
+
+
+      img_align = fusionner_horizontalement(tableau_images[0], tableau_images[1])
+      for i in range(2, len(tableau_images)):
+         img_align = fusionner_horizontalement(img_align, tableau_images[i])
+      
+      img_align.save("media/image_fusion-horizontal.png")
+
+      return render(request, 'init_image/align_horizontal.html', context={"image_classique" : True, 'tab_number' : tab_number})
 
    return render(request, 'init_image/align_horizontal.html', context={"image_classique" : False})
 
