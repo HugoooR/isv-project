@@ -22,7 +22,9 @@ def black_white(request):
       image = request.FILES['image']
 
       nom_image = str(image)
-      nom_fichier, extension = nom_image.split(".")
+      nom_fichier = nom_image.split(".")[0]
+      extension = nom_image.split(".")[-1]
+
 
       if extension not in tableau_extension:
          return render(request, 'init_image/black_white.html', context={"image_classique" : False,
@@ -47,7 +49,9 @@ def page_gray(request):
       image = request.FILES['image']
 
       nom_image = str(image)
-      nom_fichier, extension = nom_image.split(".")
+      nom_fichier = nom_image.split(".")[0]
+      extension = nom_image.split(".")[-1]
+
 
       if extension not in tableau_extension:
          return render(request, 'init_image/gray.html', context={"image_classique" : False,
@@ -72,7 +76,9 @@ def resize_picture(request):
       image = request.FILES['image']
 
       nom_image = str(image)
-      nom_fichier, extension = nom_image.split(".")
+      nom_fichier = nom_image.split(".")[0]
+      extension = nom_image.split(".")[-1]
+
 
       if extension not in tableau_extension:
          return render(request, 'init_image/resize.html', context={"image_classique" : False,
@@ -143,7 +149,9 @@ def alignement_vertical(request):
 
       for image in tableau_images:
          nom_image = str(image)
-         nom_fichier, extension = nom_image.split(".")
+         nom_fichier = nom_image.split(".")[0]
+         extension = nom_image.split(".")[-1]
+
          if extension not in tableau_extension:
             return render(request, 'init_image/align_vertical.html', context={"image_classique" : False,
             'message_erreur' : 'Erreur : mauvaise extension (jpeg/jpg, png ou svg)'})
@@ -214,7 +222,9 @@ def alignement_horizontal(request):
 
       for image in tableau_images:
          nom_image = str(image)
-         nom_fichier, extension = nom_image.split(".")
+         nom_fichier = nom_image.split(".")[0]
+         extension = nom_image.split(".")[-1]
+
          if extension not in tableau_extension:
             return render(request, 'init_image/align_horizontal.html', context={"image_classique" : False,
             'message_erreur' : 'Erreur : mauvaise extension (jpeg/jpg, png ou svg)'})
@@ -254,8 +264,12 @@ def fusion(request):
 
       nom_image = str(image)
       nom_image2 = str(image2)
-      nom_fichier, extension = nom_image.split(".")
-      nom_fichier, extension2 = nom_image2.split(".")
+      nom_fichier = nom_image.split(".")[0]
+      extension = nom_image.split(".")[-1]
+
+      nom_fichier = nom_image2.split(".")[0]
+      extension2 = nom_image2.split(".")[-1]
+
 
       if extension not in tableau_extension or extension2 not in tableau_extension:
          return render(request, 'init_image/fusion.html', context={"image_classique" : False,
@@ -303,7 +317,8 @@ def animation(request):
 
       for image in tableau_images:
          nom_image = str(image)
-         nom_fichier, extension = nom_image.split(".")
+         nom_fichier = nom_image.split(".")[0]
+         extension = nom_image.split(".")[-1]
          if extension not in tableau_extension:
             return render(request, 'init_image/animation.html', context={"image_classique" : False,
                'message_erreur' : 'Erreur : mauvaise extension (jpeg/jpg, png ou svg)'})
