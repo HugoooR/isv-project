@@ -41,11 +41,11 @@
             <form class="border boder-1 border-black p-3 w-50" action="" method="post" enctype="multipart/form-data">
                 {% csrf_token %}
                 <div class="form-group mb-3">
-                    <label class="mb-2" for="images">Choississez une image</label>
+                    <label class="mb-2" for="images">Choose your image</label>
                     <input type="file" id="images" name="images[]" accept="image/*" multiple><br>
                 </div>
                 <div class="form-group">
-                    <label class="mb-2" for="duree">Durée en ms: </label>
+                    <label class="mb-2" for="duree">Duration in ms: </label>
                     <input type="text" id="duree" name="duree" accept="image/*">
                 </div>
                 <input type="submit" class="btn btn-primary mt-3" value="Telecharger">
